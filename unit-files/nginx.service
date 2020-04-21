@@ -26,10 +26,10 @@ ExecStart=/usr/bin/docker run \
   --ulimit nofile=90000:90000 \
   -p 80:80 \
   -p 443:443 \
-  -p 18332:18332 \
+  -p 18443:18443 \
   --expose 80 \
   --expose 443 \
-  --expose 18332 \
+  --expose 18443 \
   --name nginx \
   quay.io/blockstack/bitcoind:nginx \
 /usr/local/openresty/bin/openresty

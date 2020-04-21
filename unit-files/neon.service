@@ -23,8 +23,8 @@ ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/bitcoind:neon
 ExecStart=/usr/bin/docker run \
   --net=bitcoind \
   --ulimit nofile=90000:90000 \
-  -p 18443:18443 \
-  --expose 18443 \
+  -p 28443:18443 \
+  --expose 28443 \
   -v /bitcoind/configs/bitcoin/neon-master-node.toml:/etc/neon-master-node/Config.toml \
   --name neon \
   quay.io/blockstack/bitcoind:neon \
