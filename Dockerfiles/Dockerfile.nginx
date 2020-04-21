@@ -1,0 +1,48 @@
+FROM openresty/openresty:1.15.8.3-1-alpine
+ARG LICENSE_KEY=xxxxxx
+ENV LICENSE_KEY=${LICENSE_KEY}
+
+
+ENV GEOIP_BASE_URL  https://download.maxmind.com/app/geoip_download
+ENV SUFFIX          tar.gz
+ENV GEOIP_CNTR_DB   GeoLite2-Country
+ENV GEOIP_CITY_DB   GeoLite2-City
+ENV GEOIP_ASN_DB    GeoLite2-ASN
+ENV NGINX_ROOT      /etc/nginx
+ENV GEOIP_DB_DIR    ${NGINX_ROOT}/geoip/
+ENV LUA_DIR         ${NGINX_ROOT}/lua/
+ENV NGINX_CONF_DIR  ${NGINX_ROOT}/conf.d/
+ENV NGINX_SSL_DIR   /etc/ssl/nginx
+ENV LOC NYC
+ENV ST NY
+ENV C US
+ENV ORG Blockstack
+ENV OU Testnet
+ENV DOMAIN testnet.blockstack.org
+
+ADD ${GEOIP_BASE_URL}?edition_id=${GEOIP_CNTR_DB}&license_key=${LICENSE_KEY}&suffix=${SUFFIX} /tmp/${GEOIP_CNTR_DB}.${SUFFIX}
+ADD ${GEOIP_BASE_URL}?edition_id=${GEOIP_CITY_DB}&license_key=${LICENSE_KEY}&suffix=${SUFFIX} /tmp/${GEOIP_CITY_DB}.${SUFFIX}
+ADD ${GEOIP_BASE_URL}?edition_id=${GEOIP_ASN_DB}&license_key=${LICENSE_KEY}&suffix=${SUFFIX} /tmp/${GEOIP_ASN_DB}.${SUFFIX}
+
+RUN mkdir -p ${GEOIP_DB_DIR} \
+  && mkdir -p ${NGINX_SSL_DIR} \
+  && tar -xzvf /tmp/${GEOIP_CNTR_DB}.tar.gz -C /tmp \
+  && tar -xzvf /tmp/${GEOIP_CITY_DB}.tar.gz -C /tmp \
+  && tar -xzvf /tmp/${GEOIP_ASN_DB}.tar.gz -C /tmp \
+  && mv  /tmp/GeoLite2*/*.mmdb ${GEOIP_DB_DIR} \
+  && rm -rf /tmp/GeoLite2-*
+
+RUN apk add --no-cache openssl \
+  && openssl genrsa -out ${NGINX_SSL_DIR}/server.key 2048 \
+  && openssl req -new -key ${NGINX_SSL_DIR}/server.key -out server.csr -subj "/C=${C}/ST=${ST}/L=${LOC}/O=${ORG}/OU=${OU}/CN=${DOMAIN}" \
+  && openssl x509 -req -days 1825 -in server.csr -signkey ${NGINX_SSL_DIR}/server.key -out ${NGINX_SSL_DIR}/server.crt
+
+COPY configs/nginx/geoip/*.dat ${GEOIP_DB_DIR}
+COPY configs/nginx/metrics.conf ${NGINX_CONF_DIR}
+COPY configs/nginx/lua ${LUA_DIR}
+COPY configs/nginx/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+COPY configs/nginx/default.conf ${NGINX_CONF_DIR}/default.conf
+COPY configs/nginx/html /var/www/html
+
+
+CMD ["/usr/local/openresty/bin/openresty"]
