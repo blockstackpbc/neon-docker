@@ -1,0 +1,62 @@
+{
+  "variables": {
+    "version": "1552335521",
+    "project_id": "ops-shared",
+    "zone": "us-east4-a",
+    "user_data_file": "cloud-init.yaml",
+    "image_description": "bitcoin-regtest_docker",
+    "name_prefix": "bitcoin-regtest_docker",
+    "root_volume_size": "10",
+    "network_project_id": "blockstack-terraform-admin",
+    "network": "blockstack-shared",
+    "subnetwork": "blockstack-shared-public-0",
+    "firewall": "external-ssh"
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "account_file": "",
+      "project_id": "{{user `project_id`}}",
+      "source_image_family": "cos",
+      "disk_size": "{{user `root_volume_size`}}",
+      "machine_type": "n1-standard-1",
+      "zone": "{{user `zone`}}",
+      "disk_type": "pd-ssd",
+      "image_description": "{{user `image_description`}} {{user `version`}}",
+      "ssh_username": "core",
+      "communicator": "ssh",
+      "network_project_id": "{{user `network_project_id`}}",
+      "network": "{{user `network`}}",
+      "subnetwork": "{{user `subnetwork`}}",
+      "ssh_pty": true,
+      "metadata": {
+        "user-data": "{{user `user_data_file`}}"
+      },
+      "tags" : [
+        "{{user `firewall`}}"
+      ],
+      "image_labels" : {
+        "OS": "COS Stable",
+        "Name": "{{user `name_prefix`}}_{{user `version`}}",
+        "BuildType": "SSD",
+        "BuildMethod": "Packer",
+        "BuildTime": "{{timestamp}}",
+        "Version": "{{user `version`}}"
+      }
+    }
+  ],
+  "provisioners": [{
+    "type": "shell",
+    "execute_command": "sudo -S sh '{{ .Path }}'",
+    "inline_shebang": "/bin/sh -e -x",
+    "inline": [
+      "echo '** Shreding sensitive data ...'",
+      "shred -u /etc/ssh/*_key /etc/ssh/*_key.pub",
+      "shred -u /home/core/.ssh/authorized_keys",
+      "shred -u /home/core/.ssh/authorized_keys.d/*",
+      "sudo touch /boot/coreos/first_boot",
+      "sudo rm /etc/machine-id",
+      "sync; sleep 1; sync"
+    ]
+  }]
+}
