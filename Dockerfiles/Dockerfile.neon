@@ -24,4 +24,4 @@ RUN apk --no-cache add --update ca-certificates curl libgcc \
     && rm /tmp/glibc-${GLIBC_VERSION}.apk /tmp/glibc-bin-${GLIBC_VERSION}.apk /tmp/glibc-i18n-${GLIBC_VERSION}.apk
 COPY --from=builder /usr/local/cargo/bin/neon-master-node /usr/local/bin/neon-master-node
 COPY configs/bitcoin/neon-master-node.toml.default /etc/neon-master-node/Config.toml
-CMD ["/usr/local/bin/neon-master-node /etc/neon-master-node/Config.toml"]
+CMD ["/usr/local/bin/bitcoin-neon-controller /etc/neon-master-node/Config.toml"]
