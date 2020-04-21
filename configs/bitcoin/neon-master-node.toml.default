@@ -1,0 +1,8 @@
+[neon]
+rpc_bind = "0.0.0.0:18443"
+block_time = 20000
+miner_private_key = ""
+miner_address = ""
+bitcoind_rpc_host = "bitcoin_regtest.bitcoind:28443"
+bitcoind_rpc_user = "blockstack"
+bitcoind_rpc_pass = "blockstacksystem"
