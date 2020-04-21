@@ -1,0 +1,2 @@
+*.secret
+/configs/bitcoin/neon-master-node.toml
