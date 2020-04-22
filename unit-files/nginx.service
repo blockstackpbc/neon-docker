@@ -1,12 +1,14 @@
 # # nginx.service
 # [Unit]
 # Description=Nginx service
-# After=docker.service
-# After=bitcoin_regtest.service
-# After=create_docker_network.service
-# Requires=docker.service
-# Requires=bitcoin_regtest.service
-# Requires=create_docker_network.service
+# PartOf=testnet.service
+# # After=testnet.service
+# # After=docker.service
+# # After=bitcoin_regtest.service
+# # After=create_docker_network.service
+# # Requires=docker.service
+# # Requires=bitcoin_regtest.service
+# # Requires=create_docker_network.service
 #
 #
 # [Service]
@@ -42,4 +44,5 @@
 # MemoryDenyWriteExecute=true
 #
 # [Install]
-# WantedBy=multi-user.target
+# # WantedBy=multi-user.target
+# WantedBy=testnet.service

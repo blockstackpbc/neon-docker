@@ -1,17 +1,17 @@
 # blockstack_core.service
 [Unit]
 Description=Blockstack Core service
-Requires=docker.service
-Requires=create_docker_network.service
-After=docker.service
-After=create_docker_network.service
+PartOf=testnet.service
+After=testnet.service
+After=neon.service
+Requires=neon.service
 
 [Service]
 TimeoutStartSec=5
 Restart=always
 RemainAfterExit=yes
 RestartSec=5
-RuntimeDirectory=/tmp/bitcoind
+RuntimeDirectory=/bitcoind
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true
@@ -39,4 +39,5 @@ ExecReload=-/usr/bin/docker restart blockstack_core
 MemoryDenyWriteExecute=true
 
 [Install]
-WantedBy=multi-user.target
+# WantedBy=multi-user.target
+WantedBy=testnet.service

@@ -1,17 +1,23 @@
 # neon.service
 [Unit]
 Description=Neon service
-After=docker.service
-After=bitcoin_regtest.service
-After=create_docker_network.service
-Requires=docker.service
-Requires=create_docker_network.service
-Requires=bitcoin_regtest.service
+PartOf=testnet.service
+After=testnet.service
+After=p2p_firewall.service
+Requires=p2p_firewall.service
+Before=blockstack_core.service
+
+# After=docker.service
+# After=bitcoin_regtest.service
+# After=create_docker_network.service
+# Requires=docker.service
+# Requires=create_docker_network.service
+# Requires=bitcoin_regtest.service
 
 [Service]
 TimeoutStartSec=0
 Restart=on-failure
-RuntimeDirectory=/tmp/bitcoind
+RuntimeDirectory=/bitcoind
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true
@@ -25,11 +31,12 @@ ExecStart=/usr/bin/docker run \
   --ulimit nofile=90000:90000 \
   -p 18443:18443 \
   --expose 18443 \
-  -v /tmp/bitcoind/configs/bitcoin/neon-master-node.toml:/etc/neon-master-node/Config.toml \
+  -v /bitcoind/configs/bitcoin/neon-master-node.toml:/etc/neon-master-node/Config.toml \
   --name neon \
   quay.io/blockstack/bitcoind:neon \
 /usr/local/bin/bitcoin-neon-controller /etc/neon-master-node/Config.toml
 
+ExecStartPost=/bin/sleep 10
 ExecStop=-/usr/bin/docker stop neon
 ExecStopPost=-/usr/bin/docker rm -f neon
 ExecReload=-/usr/bin/docker restart neon
@@ -38,4 +45,5 @@ ExecReload=-/usr/bin/docker restart neon
 MemoryDenyWriteExecute=true
 
 [Install]
-WantedBy=multi-user.target
+# WantedBy=multi-user.target
+WantedBy=testnet.service
