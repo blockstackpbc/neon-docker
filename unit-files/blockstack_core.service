@@ -31,7 +31,7 @@ ExecStart=/usr/bin/docker run \
   -v /mnt/stateful_partition/bitcoind/configs/bitcoin/blockstack_core.conf:/src/stacks-blockchain/god-node-conf.toml \
   --name blockstack_core \
   quay.io/blockstack/bitcoind:stacks-node-alpha \
-stacks-node /src/stacks-blockchain/god-node-conf.toml
+/bin/stacks-testnet /src/stacks-blockchain/god-node-conf.toml
 
 ExecStop=-/usr/bin/docker stop blockstack_core
 ExecStopPost=-/usr/bin/docker rm -f blockstack_core
