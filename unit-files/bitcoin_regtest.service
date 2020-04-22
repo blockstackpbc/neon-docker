@@ -36,7 +36,7 @@ ExecStart=/usr/bin/docker run \
   -e BTC_CONF=/etc/bitcoin/bitcoin.conf \
   -e BTC_DATA=/root/.bitcoin \
   -e BTC_PID=/run/bitcoind.pid \
-  -v /bitcoind/configs/bitcoin/bitcoin-regtest.conf:/etc/bitcoin/bitcoin.conf \
+  -v /mnt/stateful_partition/bitcoind/configs/bitcoin/bitcoin-regtest.conf:/etc/bitcoin/bitcoin.conf \
   -v /mnt/stateful_partition/data/bitcoin:/root/.bitcoin \
   --name bitcoin_regtest \
   quay.io/blockstack/bitcoind:v0.20.99.0 \
