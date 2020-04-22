@@ -3,7 +3,7 @@
     "version": "1552335521",
     "project_id": "ops-shared",
     "zone": "us-east4-a",
-    "user_data_file": "cloud-init.yaml",
+    "startup_script": "startup.sh",
     "image_description": "bitcoin-regtest_docker",
     "name_prefix": "bitcoin-regtest_docker",
     "root_volume_size": "10",
@@ -23,14 +23,14 @@
       "zone": "{{user `zone`}}",
       "disk_type": "pd-ssd",
       "image_description": "{{user `image_description`}} {{user `version`}}",
-      "ssh_username": "core",
+      "ssh_username": "chronos",
       "communicator": "ssh",
       "network_project_id": "{{user `network_project_id`}}",
       "network": "{{user `network`}}",
       "subnetwork": "{{user `subnetwork`}}",
       "ssh_pty": true,
       "metadata": {
-        "user-data": "{{user `user_data_file`}}"
+        "startup-script": "{{user `startup_script`}}"
       },
       "tags" : [
         "{{user `firewall`}}"
@@ -52,9 +52,8 @@
     "inline": [
       "echo '** Shreding sensitive data ...'",
       "shred -u /etc/ssh/*_key /etc/ssh/*_key.pub",
-      "shred -u /home/core/.ssh/authorized_keys",
-      "shred -u /home/core/.ssh/authorized_keys.d/*",
-      "sudo touch /boot/coreos/first_boot",
+      "shred -u /home/chronos/.ssh/authorized_keys",
+      "shred -u /home/chronos/.ssh/authorized_keys.d/*",
       "sudo rm /etc/machine-id",
       "sync; sleep 1; sync"
     ]
