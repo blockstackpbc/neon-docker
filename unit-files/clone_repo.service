@@ -1,14 +1,14 @@
 # clone_repo.service
 [Unit]
 Description=Checkout neon-docker Repo
-ConditionPathExists=!/bitcoind
+ConditionPathExists=!/mnt/stateful_partition/bitcoind
 Before=docker.service
 Before=pull_repo.service
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/git clone -b master --single-branch https://github.com/blockstackpbc/neon-docker /bitcoind
+ExecStart=/usr/bin/git clone -b master --single-branch https://github.com/blockstackpbc/neon-docker /mnt/stateful_partition/bitcoind
 
 [Install]
 WantedBy=multi-user.target

@@ -11,7 +11,7 @@ Before=blockstack_core.service
 [Service]
 TimeoutStartSec=0
 Restart=on-failure
-RuntimeDirectory=/bitcoind
+RuntimeDirectory=/mnt/stateful_partition/bitcoind
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true

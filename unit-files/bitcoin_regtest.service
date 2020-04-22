@@ -15,7 +15,7 @@ TimeoutStartSec=35
 Restart=always
 RemainAfterExit=yes
 RestartSec=5
-RuntimeDirectory=/bitcoind
+RuntimeDirectory=/mnt/stateful_partition/bitcoind
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true
@@ -23,7 +23,7 @@ PrivateDevices=true
 
 ExecStartPre=-/usr/bin/docker stop bitcoin_regtest
 ExecStartPre=-/bin/sleep 1
-ExecStartPre=-/bin/rm -rf /data/bitcoin/regtest
+ExecStartPre=-/bin/rm -rf /mnt/stateful_partition/data/bitcoin/regtest
 ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/bitcoind:v0.20.99.0
 ExecStart=/usr/bin/docker run \
   --restart=always \
@@ -37,7 +37,7 @@ ExecStart=/usr/bin/docker run \
   -e BTC_DATA=/root/.bitcoin \
   -e BTC_PID=/run/bitcoind.pid \
   -v /bitcoind/configs/bitcoin/bitcoin-regtest.conf:/etc/bitcoin/bitcoin.conf \
-  -v /data/bitcoin:/root/.bitcoin \
+  -v /mnt/stateful_partition/data/bitcoin:/root/.bitcoin \
   --name bitcoin_regtest \
   quay.io/blockstack/bitcoind:v0.20.99.0 \
 /usr/local/bin/bitcoind -conf=/etc/bitcoin/bitcoin.conf -pid=/run/bitcoind.pid -datadir=/root/.bitcoin

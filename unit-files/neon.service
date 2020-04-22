@@ -7,17 +7,10 @@ After=p2p_firewall.service
 Requires=p2p_firewall.service
 Before=blockstack_core.service
 
-# After=docker.service
-# After=bitcoin_regtest.service
-# After=create_docker_network.service
-# Requires=docker.service
-# Requires=create_docker_network.service
-# Requires=bitcoin_regtest.service
-
 [Service]
 TimeoutStartSec=0
 Restart=on-failure
-RuntimeDirectory=/bitcoind
+RuntimeDirectory=/mnt/stateful_partition/bitcoind
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true
@@ -31,7 +24,7 @@ ExecStart=/usr/bin/docker run \
   --ulimit nofile=90000:90000 \
   -p 18443:18443 \
   --expose 18443 \
-  -v /bitcoind/configs/bitcoin/neon-master-node.toml:/etc/neon-master-node/Config.toml \
+  -v /mnt/stateful_partition/bitcoind/configs/bitcoin/neon-master-node.toml:/etc/neon-master-node/Config.toml \
   --name neon \
   quay.io/blockstack/bitcoind:neon \
 /usr/local/bin/bitcoin-neon-controller /etc/neon-master-node/Config.toml
