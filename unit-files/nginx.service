@@ -1,45 +1,45 @@
-# nginx.service
-[Unit]
-Description=Nginx service
-After=docker.service
-After=bitcoin_regtest.service
-After=create_docker_network.service
-Requires=docker.service
-Requires=bitcoin_regtest.service
-Requires=create_docker_network.service
-
-
-[Service]
-TimeoutStartSec=0
-Restart=on-failure
-RuntimeDirectory=bitcoind
-PrivateTmp=true
-ProtectSystem=full
-NoNewPrivileges=true
-PrivateDevices=true
-
-ExecStartPre=-/usr/bin/docker stop nginx
-ExecStartPre=-/usr/bin/docker rm nginx
-ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/bitcoind:nginx
-ExecStart=/usr/bin/docker run \
-  --net=bitcoind \
-  --ulimit nofile=90000:90000 \
-  -p 80:80 \
-  -p 443:443 \
-  -p 18443:18443 \
-  --expose 80 \
-  --expose 443 \
-  --expose 18443 \
-  --name nginx \
-  quay.io/blockstack/bitcoind:nginx \
-/usr/local/openresty/bin/openresty
-
-ExecStop=-/usr/bin/docker stop nginx
-ExecStopPost=-/usr/bin/docker rm -f nginx
-ExecReload=-/usr/bin/docker restart nginx
-
-# Deny the creation of writable and executable memory mappings.
-MemoryDenyWriteExecute=true
-
-[Install]
-WantedBy=multi-user.target
+# # nginx.service
+# [Unit]
+# Description=Nginx service
+# After=docker.service
+# After=bitcoin_regtest.service
+# After=create_docker_network.service
+# Requires=docker.service
+# Requires=bitcoin_regtest.service
+# Requires=create_docker_network.service
+#
+#
+# [Service]
+# TimeoutStartSec=0
+# Restart=on-failure
+# RuntimeDirectory=bitcoind
+# PrivateTmp=true
+# ProtectSystem=full
+# NoNewPrivileges=true
+# PrivateDevices=true
+#
+# ExecStartPre=-/usr/bin/docker stop nginx
+# ExecStartPre=-/usr/bin/docker rm nginx
+# ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/bitcoind:nginx
+# ExecStart=/usr/bin/docker run \
+#   --net=bitcoind \
+#   --ulimit nofile=90000:90000 \
+#   -p 80:80 \
+#   -p 443:443 \
+#   -p 18443:18443 \
+#   --expose 80 \
+#   --expose 443 \
+#   --expose 18443 \
+#   --name nginx \
+#   quay.io/blockstack/bitcoind:nginx \
+# /usr/local/openresty/bin/openresty
+#
+# ExecStop=-/usr/bin/docker stop nginx
+# ExecStopPost=-/usr/bin/docker rm -f nginx
+# ExecReload=-/usr/bin/docker restart nginx
+#
+# # Deny the creation of writable and executable memory mappings.
+# MemoryDenyWriteExecute=true
+#
+# [Install]
+# WantedBy=multi-user.target

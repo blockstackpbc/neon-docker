@@ -11,7 +11,7 @@ Requires=create_docker_network.service
 [Service]
 TimeoutStartSec=0
 Restart=on-failure
-RuntimeDirectory=bitcoind
+RuntimeDirectory=/tmp/bitcoind
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true

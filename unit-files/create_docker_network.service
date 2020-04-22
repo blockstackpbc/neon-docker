@@ -1,7 +1,7 @@
 # create_docker_network.service
 [Unit]
 Description=BTC Docker Network
-ConditionFileIsExecutable=/bitcoind/scripts/create_docker_network.sh
+ConditionFileIsExecutable=/tmp/bitcoind/scripts/create_docker_network.sh
 Requires=docker.service
 Requires=clone_repo.service
 Before=bitcoin_core.service
@@ -14,7 +14,7 @@ TimeoutStartSec=0
 Type=oneshot
 RemainAfterExit=yes
 
-ExecStart=/bin/sh /bitcoind/scripts/create_docker_network.sh
+ExecStart=/bin/sh /tmp/bitcoind/scripts/create_docker_network.sh
 
 [Install]
 WantedBy=multi-user.target

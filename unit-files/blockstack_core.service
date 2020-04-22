@@ -1,0 +1,42 @@
+# blockstack_core.service
+[Unit]
+Description=Blockstack Core service
+Requires=docker.service
+Requires=create_docker_network.service
+After=docker.service
+After=create_docker_network.service
+
+[Service]
+TimeoutStartSec=5
+Restart=always
+RemainAfterExit=yes
+RestartSec=5
+RuntimeDirectory=/tmp/bitcoind
+PrivateTmp=true
+ProtectSystem=full
+NoNewPrivileges=true
+PrivateDevices=true
+
+ExecStartPre=-/usr/bin/docker stop blockstack_core
+ExecStartPre=-/bin/sleep 1
+ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/bitcoind:stacks-node-alpha
+ExecStart=/usr/bin/docker run \
+  --restart=always \
+  --net=bitcoind \
+  --ulimit nofile=90000:90000 \
+  -p 20443:20443 \
+  -p 20444:20444 \
+  --expose 20443 \
+  --expose 20444 \
+  --name blockstack_core \
+quay.io/blockstack/bitcoind:stacks-node-alpha
+
+ExecStop=-/usr/bin/docker stop blockstack_core
+ExecStopPost=-/usr/bin/docker rm -f blockstack_core
+ExecReload=-/usr/bin/docker restart blockstack_core
+
+# Deny the creation of writable and executable memory mappings.
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target
