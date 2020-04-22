@@ -8,8 +8,6 @@ After=clone_repo.service
 [Service]
 Type=simple
 ExecStart=/usr/bin/git -C /mnt/stateful_partition/bitcoind pull
-ExecStartPost=/usr/bin/rsync -av --exclude='/mnt/stateful_partition/bitcoind/unit-files/nginx.service' /mnt/stateful_partition/bitcoind/unit-files/ /etc/systemd/system/
-ExecStartPost=/usr/bin/systemctl daemon-reload
 
 [Install]
 WantedBy=multi-user.target
