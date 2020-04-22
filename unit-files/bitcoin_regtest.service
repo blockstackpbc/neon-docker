@@ -28,8 +28,8 @@ ExecStart=/usr/bin/docker run \
   --net=bitcoind \
   --ulimit nofile=90000:90000 \
   -p 28444:18444 \
-  -p 28332:18332 \
-  --expose 28332 \
+  -p 28443:18443 \
+  --expose 28443 \
   --expose 28444 \
   -e BTC_CONF=/etc/bitcoin/bitcoin.conf \
   -e BTC_DATA=/root/.bitcoin \
