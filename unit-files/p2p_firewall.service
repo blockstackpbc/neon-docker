@@ -1,17 +1,15 @@
 # p2p_firewall.service
 [Unit]
 Description=P2P Firewall service
-PartOf=testnet.service
-After=testnet.service
+PartOf=blockstack_core.service
 After=bitcoin_regtest.service
 Requires=bitcoin_regtest.service
 Before=neon.service
-Before=blockstack_core.service
 
 [Service]
 TimeoutStartSec=0
-Restart=on-failure
-RuntimeDirectory=/mnt/stateful_partition/bitcoind
+Restart=always
+RuntimeDirectory=mnt/stateful_partition/bitcoind
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true
@@ -37,5 +35,5 @@ ExecReload=-/usr/bin/docker restart p2p_firewall
 MemoryDenyWriteExecute=true
 
 [Install]
-# WantedBy=multi-user.target
-WantedBy=testnet.service
+#WantedBy=multi-user.target
+WantedBy=blockstack_core.service

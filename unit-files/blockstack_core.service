@@ -1,17 +1,18 @@
 # blockstack_core.service
 [Unit]
 Description=Blockstack Core service
-PartOf=testnet.service
-After=testnet.service
+Requires=docker.service
+Requires=create_docker_network.service
+After=create_docker_network.service
+After=bitcoin_regtest.service
+After=p2p_firewall.service
 After=neon.service
-Requires=neon.service
 
 [Service]
-TimeoutStartSec=5
+TimeoutStartSec=60
 Restart=always
 RemainAfterExit=yes
-RestartSec=5
-RuntimeDirectory=/mnt/stateful_partition/bitcoind
+RuntimeDirectory=mnt/stateful_partition/bitcoind
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true
@@ -28,6 +29,7 @@ ExecStart=/usr/bin/docker run \
   -p 20444:20444 \
   --expose 20443 \
   --expose 20444 \
+  -e RUST_BACKTRACE=full \
   -v /mnt/stateful_partition/bitcoind/configs/bitcoin/blockstack_core.toml:/src/stacks-blockchain/god-node-conf.toml \
   --name blockstack_core \
   quay.io/blockstack/bitcoind:stacks-node-alpha \
@@ -41,5 +43,4 @@ ExecReload=-/usr/bin/docker restart blockstack_core
 MemoryDenyWriteExecute=true
 
 [Install]
-# WantedBy=multi-user.target
-WantedBy=testnet.service
+WantedBy=multi-user.target

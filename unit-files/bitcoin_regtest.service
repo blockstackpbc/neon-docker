@@ -1,21 +1,16 @@
 # bitcoin_regtest.service
 [Unit]
 Description=BTC Regtest service
-PartOf=testnet.service
-After=testnet.service
-Requires=docker.service
-Requires=create_docker_network.service
-After=create_docker_network.service
+PartOf=blockstack_core.service
 Before=p2p_firewall.service
 Before=neon.service
-Before=blockstack_core.service
 
 [Service]
 TimeoutStartSec=35
 Restart=always
 RemainAfterExit=yes
 RestartSec=5
-RuntimeDirectory=/mnt/stateful_partition/bitcoind
+RuntimeDirectory=mnt/stateful_partition/bitcoind
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true
@@ -23,7 +18,7 @@ PrivateDevices=true
 
 ExecStartPre=-/usr/bin/docker stop bitcoin_regtest
 ExecStartPre=-/bin/sleep 1
-ExecStartPre=-/bin/rm -rf /mnt/stateful_partition/data/bitcoin/regtest
+ExecStartPre=-/bin/rm -rf /data/bitcoin/regtest
 ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/bitcoind:v0.20.99.0
 ExecStart=/usr/bin/docker run \
   --restart=always \
@@ -51,5 +46,5 @@ ExecReload=-/usr/bin/docker restart bitcoin_regtest
 MemoryDenyWriteExecute=true
 
 [Install]
-# WantedBy=multi-user.target
-WantedBy=testnet.service
+#WantedBy=multi-user.target
+WantedBy=blockstack_core.service

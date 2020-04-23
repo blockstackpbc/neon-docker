@@ -1,16 +1,15 @@
 # neon.service
 [Unit]
 Description=Neon service
-PartOf=testnet.service
+PartOf=blockstack_core.service
 After=testnet.service
 After=p2p_firewall.service
 Requires=p2p_firewall.service
-Before=blockstack_core.service
 
 [Service]
 TimeoutStartSec=0
-Restart=on-failure
-RuntimeDirectory=/mnt/stateful_partition/bitcoind
+Restart=always
+RuntimeDirectory=mnt/stateful_partition/bitcoind
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true
@@ -38,5 +37,5 @@ ExecReload=-/usr/bin/docker restart neon
 MemoryDenyWriteExecute=true
 
 [Install]
-# WantedBy=multi-user.target
-WantedBy=testnet.service
+#WantedBy=multi-user.target
+WantedBy=blockstack_core.service
