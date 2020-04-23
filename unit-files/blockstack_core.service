@@ -28,7 +28,7 @@ ExecStart=/usr/bin/docker run \
   -p 20444:20444 \
   --expose 20443 \
   --expose 20444 \
-  -v /mnt/stateful_partition/bitcoind/configs/bitcoin/blockstack_core.conf:/src/stacks-blockchain/god-node-conf.toml \
+  -v /mnt/stateful_partition/bitcoind/configs/bitcoin/blockstack_core.toml:/src/stacks-blockchain/god-node-conf.toml \
   --name blockstack_core \
   quay.io/blockstack/bitcoind:stacks-node-alpha \
 /bin/stacks-testnet /src/stacks-blockchain/god-node-conf.toml
