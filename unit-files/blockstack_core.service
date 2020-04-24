@@ -20,7 +20,7 @@ PrivateDevices=true
 
 ExecStartPre=-/usr/bin/docker stop blockstack_core
 ExecStartPre=-/bin/sleep 1
-ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/bitcoind:stacks-node-alpha
+ExecStartPre=-/usr/bin/docker pull blockstack/stacks-blockchain:latest
 ExecStart=/usr/bin/docker run \
   --restart=always \
   --net=bitcoind \
@@ -32,8 +32,8 @@ ExecStart=/usr/bin/docker run \
   -e RUST_BACKTRACE=full \
   -v /mnt/stateful_partition/bitcoind/configs/bitcoin/blockstack_core.toml:/src/stacks-blockchain/god-node-conf.toml \
   --name blockstack_core \
-  quay.io/blockstack/bitcoind:stacks-node-alpha \
-/bin/stacks-testnet /src/stacks-blockchain/god-node-conf.toml
+  blockstack/stacks-blockchain:latest \
+/bin/stacks-node start --config /src/stacks-blockchain/god-node-conf.toml
 
 ExecStop=-/usr/bin/docker stop blockstack_core
 ExecStopPost=-/usr/bin/docker rm -f blockstack_core
