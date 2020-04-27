@@ -1,2 +1,3 @@
 *.secret
+/fluentd
 /configs/bitcoin/neon-master-node.toml
