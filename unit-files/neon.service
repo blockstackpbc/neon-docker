@@ -19,6 +19,7 @@ ExecStartPre=-/usr/bin/docker stop neon
 ExecStartPre=-/usr/bin/docker rm neon
 ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/bitcoind:neon
 ExecStart=/usr/bin/docker run \
+  --log-driver=fluentd \
   --net=bitcoind \
   --ulimit nofile=90000:90000 \
   -p 18443:18443 \

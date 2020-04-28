@@ -21,6 +21,7 @@ ExecStartPre=-/bin/sleep 1
 ExecStartPre=-/bin/rm -rf /data/bitcoin/regtest
 ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/bitcoind:v0.20.99.0
 ExecStart=/usr/bin/docker run \
+  --log-driver=fluentd \
   --restart=always \
   --net=bitcoind \
   --ulimit nofile=90000:90000 \

@@ -24,6 +24,7 @@
 # ExecStartPre=-/usr/bin/docker rm nginx
 # ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/bitcoind:nginx
 # ExecStart=/usr/bin/docker run \
+#   --log-driver=fluentd \
 #   --net=bitcoind \
 #   --ulimit nofile=90000:90000 \
 #   -p 80:80 \

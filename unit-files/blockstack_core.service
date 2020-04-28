@@ -22,6 +22,7 @@ ExecStartPre=-/usr/bin/docker stop blockstack_core
 ExecStartPre=-/bin/sleep 1
 ExecStartPre=-/usr/bin/docker pull blockstack/stacks-blockchain:latest
 ExecStart=/usr/bin/docker run \
+  --log-driver=fluentd \
   --restart=always \
   --net=bitcoind \
   --ulimit nofile=90000:90000 \
