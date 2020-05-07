@@ -27,7 +27,7 @@ ExecStart=/usr/bin/docker run \
   -v /mnt/stateful_partition/bitcoind/configs/bitcoin/neon-master-node.toml:/etc/neon-master-node/Config.toml \
   --name neon \
   quay.io/blockstack/bitcoind:neon \
-/usr/local/bin/bitcoin-neon-controller /etc/neon-master-node/Config.toml
+/bin/bitcoin-neon-controller /etc/neon-master-node/Config.toml
 
 ExecStartPost=/bin/sleep 10
 ExecStop=-/usr/bin/docker stop neon
