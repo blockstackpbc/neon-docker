@@ -2,8 +2,10 @@
 [Unit]
 Description=BTC Regtest service
 PartOf=blockstack_core.service
+Requires=fluentd.service
 Before=p2p_firewall.service
 Before=neon.service
+After=fluentd.service
 
 [Service]
 TimeoutStartSec=35

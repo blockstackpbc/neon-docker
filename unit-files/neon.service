@@ -2,9 +2,7 @@
 [Unit]
 Description=Neon service
 PartOf=blockstack_core.service
-After=testnet.service
-After=p2p_firewall.service
-Requires=p2p_firewall.service
+After=bitcoin_regtest.service
 
 [Service]
 TimeoutStartSec=0

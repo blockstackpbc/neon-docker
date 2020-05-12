@@ -3,10 +3,12 @@
 Description=Blockstack Core service
 Requires=docker.service
 Requires=create_docker_network.service
+Requires=fluentd.service
 After=create_docker_network.service
 After=bitcoin_regtest.service
 After=p2p_firewall.service
 After=neon.service
+After=fluentd.service
 
 [Service]
 TimeoutStartSec=60
@@ -31,6 +33,7 @@ ExecStart=/usr/bin/docker run \
   --expose 20443 \
   --expose 20444 \
   -e RUST_BACKTRACE=full \
+  -e BLOCKSTACK_DEBUG=1 \
   -v /mnt/stateful_partition/bitcoind/configs/bitcoin/blockstack_core.toml:/src/stacks-blockchain/god-node-conf.toml \
   --name blockstack_core \
   blockstack/stacks-blockchain:latest \
