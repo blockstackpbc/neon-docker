@@ -15,7 +15,6 @@ ExecStartPre=-/usr/bin/docker pull quay.io/blockstack/fluentd:v1.3
 ExecStart=/usr/bin/docker run \
   --rm \
   --net=bitcoind \
-  -m 128m \
   -p 24224:24224 \
   -e FLUENTD_OPT="${FLUENTD_OPT}" \
   -e OUTPUT_HOST="${OUTPUT_HOST}" \
@@ -32,7 +31,7 @@ ExecStart=/usr/bin/docker run \
   -e OUTPUT_PASSWORD="${OUTPUT_PASSWORD}" \
   -v /var/lib/docker/containers:/var/lib/docker/containers \
   -v /usr/lib64:/host/lib \
-  -v /mnt/stateful_partition/fluentd.conf:/etc/fluent/config.d/system.conf \
+  -v /mnt/stateful_partition/bitcoind/fluentd/fluentd.conf:/etc/fluent/config.d/system.conf \
   --name fluentd \
 quay.io/blockstack/fluentd:v1.3
 
