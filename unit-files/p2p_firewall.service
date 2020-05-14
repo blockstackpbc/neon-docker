@@ -24,8 +24,9 @@ ExecStart=/usr/bin/docker run \
   -p 18444:18444 \
   --expose 18444 \
   --name p2p_firewall \
+  -e RUST_BACKTRACE=full \
   quay.io/blockstack/bitcoind:p2p-firewall \
-/usr/local/bin/bitcoin-p2p-firewalld -n regtest -b block,cmpctblock 18444 bitcoin_regtest.bitcoind:18444
+/usr/local/bin/bitcoin-p2p-firewalld -n -v 3 regtest -b block,cmpctblock 18444 bitcoin_regtest.bitcoind:18444
 
 ExecStop=-/usr/bin/docker stop p2p_firewall
 ExecStopPost=-/usr/bin/docker rm -f p2p_firewall
